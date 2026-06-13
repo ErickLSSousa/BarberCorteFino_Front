@@ -1,26 +1,32 @@
-export function formatDate(date) {
-  return new Intl.DateTimeFormat('pt-BR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }).format(new Date(date));
-}
+import { format, parseISO } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
-export function formatTime(time) {
-  return new Intl.DateTimeFormat('pt-BR', {
-    hour: '2-digit',
-    minute: '2-digit',
-  }).format(new Date(time));
-}
-
-export function formatCurrency(value) {
+// Formatar preço para moeda brasileira
+export const formatPrice = (value) => {
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
-    currency: 'BRL',
+    currency: 'BRL'
   }).format(value);
-}
+};
 
-export function formatPhone(phone) {
-  const cleaned = phone.replace(/\D/g, '');
-  return cleaned.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
-}
+// Formatar data para exibição
+export const formatDate = (dateString) => {
+  if (!dateString) return '';
+  const date = typeof dateString === 'string' ? parseISO(dateString) : dateString;
+  return format(date, 'dd/MM/yyyy', { locale: ptBR });
+};
+
+// Formatar data completa
+export const formatFullDate = (dateString) => {
+  if (!dateString) return '';
+  const date = typeof dateString === 'string' ? parseISO(dateString) : dateString;
+  return format(date, "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
+};
+
+// Formatar duração em minutos
+export const formatDuration = (minutes) => {
+  if (minutes < 60) return `${minutes} min`;
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  return `${hours}h ${mins > 0 ? `${mins}min` : ''}`;
+};

@@ -1,21 +1,36 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
-
 const api = axios.create({
-  baseURL: API_BASE_URL,
+
+  baseURL: "http://localhost:3001/api",
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Add authorization token to requests
+// Interceptor para adicionar token (se necessário)
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('authToken');
+  const token = localStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
+
+// 👇 AQUI ESTÁ A CORREÇÃO: Exportações nomeadas corretas
+export const servicesAPI = {
+  getAll: () => api.get('/services'),
+};
+
+export const barbersAPI = {
+  getAll: () => api.get('/barbers'),
+  getAvailableTimes: (barberId, date) => 
+    api.get(`/barbers/${barberId}/times?date=${date}`),
+};
+
+export const appointmentsAPI = {
+  create: (data) => api.post('/appointments', data),
+  getMy: () => api.get('/appointments/me'),
+};
 
 export default api;
