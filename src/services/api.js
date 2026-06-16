@@ -1,7 +1,9 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3001/api",
+  baseURL: import.meta.env.VITE_API_URL 
+           ? `${import.meta.env.VITE_API_URL}/api` 
+           : "http://localhost:3001/api",
   headers: {
     "Content-Type": "application/json",
   },
@@ -28,6 +30,11 @@ export const availabilityAPI = {
 
 export const appointmentsAPI = {
   create: (data) => api.post("/appointments", data),
+};
+
+// Portfolio (se existir no backend)
+export const portfolioAPI = {
+  getAll: () => api.get("/portfolio"),   // ajuste se a rota for diferente
 };
 
 export default api;
