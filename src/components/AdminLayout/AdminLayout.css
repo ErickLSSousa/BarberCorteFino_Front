@@ -29,6 +29,7 @@
 }
 
 .admin-nav a,
+.admin-home-link,
 .admin-logout {
     padding: 13px 15px;
     border-radius: 14px;
@@ -39,6 +40,7 @@
 
 .admin-nav a.active,
 .admin-nav a:hover,
+.admin-home-link:hover,
 .admin-logout:hover {
     background: var(--gold);
     color: #111
