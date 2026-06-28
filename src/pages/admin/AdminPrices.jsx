@@ -2,4 +2,94 @@ import { useEffect, useState } from "react";
 import { servicesAPI } from "../../services/api";
 import { adminServicesAPI } from "../../services/adminAPI";
 
-export default function AdminPrices(){const[items,setItems]=useState([]);const[form,setForm]=useState({name:"",duration_minutes:"",price:""});async function load(){const{data}=await servicesAPI.getAll();setItems(data.services||[]);}useEffect(()=>{load();},[]);async function submit(e){e.preventDefault();await adminServicesAPI.create({...form,duration_minutes:Number(form.duration_minutes),price_cents:Math.round(Number(form.price)*100)});setForm({name:"",duration_minutes:"",price:""});load();}async function remove(id){await adminServicesAPI.remove(id);load();}return <section className="admin-page"><div className="admin-page-header"><div><h1>Preços e Serviços</h1><p className="muted">Cadastre cortes, duração e valores.</p></div></div><form className="admin-card admin-form" onSubmit={submit}><input placeholder="Nome do serviço" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} required/><input type="number" placeholder="Duração (min)" value={form.duration_minutes} onChange={e=>setForm({...form,duration_minutes:e.target.value})} required/><input type="number" step="0.01" placeholder="Preço (R$)" value={form.price} onChange={e=>setForm({...form,price:e.target.value})} required/><button>Adicionar</button></form><div className="admin-card admin-table-wrap"><table className="admin-table"><thead><tr><th>Serviço</th><th>Duração</th><th>Preço</th><th></th></tr></thead><tbody>{items.map(s=><tr key={s.id}><td>{s.name}</td><td>{s.duration_minutes} min</td><td>R$ {((s.price_cents||0)/100).toFixed(2)}</td><td><button className="danger-btn" onClick={()=>remove(s.id)}>Excluir</button></td></tr>)}</tbody></table></div></section>}
+export default function AdminPrices() {
+  const [items, setItems] = useState([]);
+  const [form, setForm] = useState({
+    name: "",
+    duration_minutes: "",
+    price: "",
+  });
+  async function load() {
+    const { data } = await servicesAPI.getAll();
+    setItems(data.services || []);
+  }
+  useEffect(() => {
+    load();
+  }, []);
+  async function submit(e) {
+    e.preventDefault();
+    await adminServicesAPI.create({
+      ...form,
+      duration_minutes: Number(form.duration_minutes),
+      price_cents: Math.round(Number(form.price) * 100),
+    });
+    setForm({ name: "", duration_minutes: "", price: "" });
+    load();
+  }
+  async function remove(id) {
+    await adminServicesAPI.remove(id);
+    load();
+  }
+  return (
+    <section className="admin-page">
+      <div className="admin-page-header">
+        <div>
+          <h1>Preços e Serviços</h1>
+          <p className="muted">Cadastre cortes, duração e valores.</p>
+        </div>
+      </div>
+      <form className="admin-card admin-form" onSubmit={submit}>
+        <input
+          placeholder="Nome do serviço"
+          value={form.name}
+          onChange={(e) => setForm({ ...form, name: e.target.value })}
+          required
+        />
+        <input
+          type="number"
+          placeholder="Duração (min)"
+          value={form.duration_minutes}
+          onChange={(e) =>
+            setForm({ ...form, duration_minutes: e.target.value })
+          }
+          required
+        />
+        <input
+          type="number"
+          step="0.01"
+          placeholder="Preço (R$)"
+          value={form.price}
+          onChange={(e) => setForm({ ...form, price: e.target.value })}
+          required
+        />
+        <button>Adicionar</button>
+      </form>
+      <div className="admin-card admin-table-wrap">
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th>Serviço</th>
+              <th>Duração</th>
+              <th>Preço</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((s) => (
+              <tr key={s.id}>
+                <td>{s.name}</td>
+                <td>{s.duration_minutes} min</td>
+                <td>R$ {((s.price_cents || 0) / 100).toFixed(2)}</td>
+                <td>
+                  <button className="danger-btn" onClick={() => remove(s.id)}>
+                    Excluir
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}

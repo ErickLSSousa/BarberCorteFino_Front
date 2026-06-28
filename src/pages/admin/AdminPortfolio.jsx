@@ -2,4 +2,90 @@ import { useEffect, useState } from "react";
 import { portfolioAPI } from "../../services/portfolioAPI";
 import { adminPortfolioAPI } from "../../services/adminAPI";
 
-export default function AdminPortfolio(){const[items,setItems]=useState([]);const[form,setForm]=useState({title:"",barber_name:"",image_url:""});async function load(){const{data}=await portfolioAPI.getAll();setItems(data.works||data.portfolio||[]);}useEffect(()=>{load();},[]);async function submit(e){e.preventDefault();await adminPortfolioAPI.create(form);setForm({title:"",barber_name:"",image_url:""});load();}async function remove(id){await adminPortfolioAPI.remove(id);load();}return <section className="admin-page"><h1>Portfólio</h1><form className="admin-card admin-form" onSubmit={submit}><input placeholder="Título do corte" value={form.title} onChange={e=>setForm({...form,title:e.target.value})} required/><input placeholder="Barbeiro" value={form.barber_name} onChange={e=>setForm({...form,barber_name:e.target.value})}/><input placeholder="URL da imagem" value={form.image_url} onChange={e=>setForm({...form,image_url:e.target.value})} required/><button>Adicionar</button></form><div className="admin-card admin-table-wrap"><table className="admin-table"><thead><tr><th>Imagem</th><th>Título</th><th>Barbeiro</th><th></th></tr></thead><tbody>{items.map(w=><tr key={w.id}><td><img src={w.image_url} alt="" style={{width:72,height:72,objectFit:"cover",borderRadius:12}}/></td><td>{w.title}</td><td>{w.barber_name||"-"}</td><td><button className="danger-btn" onClick={()=>remove(w.id)}>Excluir</button></td></tr>)}</tbody></table></div></section>}
+export default function AdminPortfolio() {
+  const [items, setItems] = useState([]);
+  const [form, setForm] = useState({
+    title: "",
+    barber_name: "",
+    image_url: "",
+  });
+  async function load() {
+    const { data } = await portfolioAPI.getAll();
+    setItems(data.works || data.portfolio || []);
+  }
+  useEffect(() => {
+    load();
+  }, []);
+  async function submit(e) {
+    e.preventDefault();
+    await adminPortfolioAPI.create(form);
+    setForm({ title: "", barber_name: "", image_url: "" });
+    load();
+  }
+  async function remove(id) {
+    await adminPortfolioAPI.remove(id);
+    load();
+  }
+  return (
+    <section className="admin-page">
+      <h1>Portfólio</h1>
+      <form className="admin-card admin-form" onSubmit={submit}>
+        <input
+          placeholder="Título do corte"
+          value={form.title}
+          onChange={(e) => setForm({ ...form, title: e.target.value })}
+          required
+        />
+        <input
+          placeholder="Barbeiro"
+          value={form.barber_name}
+          onChange={(e) => setForm({ ...form, barber_name: e.target.value })}
+        />
+        <input
+          placeholder="URL da imagem"
+          value={form.image_url}
+          onChange={(e) => setForm({ ...form, image_url: e.target.value })}
+          required
+        />
+        <button>Adicionar</button>
+      </form>
+      <div className="admin-card admin-table-wrap">
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th>Imagem</th>
+              <th>Título</th>
+              <th>Barbeiro</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((w) => (
+              <tr key={w.id}>
+                <td>
+                  <img
+                    src={w.image_url}
+                    alt=""
+                    style={{
+                      width: 72,
+                      height: 72,
+                      objectFit: "cover",
+                      borderRadius: 12,
+                    }}
+                  />
+                </td>
+                <td>{w.title}</td>
+                <td>{w.barber_name || "-"}</td>
+                <td>
+                  <button className="danger-btn" onClick={() => remove(w.id)}>
+                    Excluir
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
