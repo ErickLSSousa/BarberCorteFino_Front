@@ -116,8 +116,12 @@ export default function Booking() {
         <h1 className="booking-title">Agendar Horário</h1>
 
         <div className="booking-grid">
-          <div>
+          <section className="booking-section services-card">
             <h2 className="booking-subtitle">Serviços</h2>
+            <p className="booking-helper">
+              Selecione um ou mais serviços para calcular o tempo e o valor do
+              atendimento.
+            </p>
 
             <div className="service-list">
               {services.map((service) => (
@@ -126,9 +130,7 @@ export default function Booking() {
                   type="button"
                   onClick={() => toggleService(service.id)}
                   className={`service-option ${
-                    selectedServices.includes(service.id)
-                      ? "is-selected"
-                      : ""
+                    selectedServices.includes(service.id) ? "is-selected" : ""
                   }`}
                 >
                   <div className="service-name">{service.name}</div>
@@ -139,89 +141,129 @@ export default function Booking() {
                 </button>
               ))}
             </div>
-          </div>
+          </section>
 
-          <div>
-            <select
-              className="booking-control"
-              value={selectedBarber}
-              onChange={(e) => setSelectedBarber(e.target.value)}
-            >
-              <option value="">Escolha o barbeiro</option>
+          <section className="booking-section schedule-card">
+            <h2 className="booking-subtitle">Barbeiros</h2>
+            <p className="booking-helper">
+              Escolha o profissional, a data e depois selecione um horário
+              disponível.
+            </p>
 
-              {barbers.map((barber) => (
-                <option key={barber.id} value={barber.id}>
-                  {barber.name}
-                </option>
-              ))}
-            </select>
+            <div className="booking-field">
+              <label htmlFor="barber-select">Barbeiro</label>
+              <select
+                id="barber-select"
+                className="booking-control"
+                value={selectedBarber}
+                onChange={(e) => setSelectedBarber(e.target.value)}
+              >
+                <option value="">Escolha o barbeiro</option>
 
-            <input
-              type="date"
-              min={new Date().toISOString().split("T")[0]}
-              className="booking-control"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-            />
+                {barbers.map((barber) => (
+                  <option key={barber.id} value={barber.id}>
+                    {barber.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-            <div className="time-grid">
-              {availableTimes.map((time) => (
-                <button
-                  key={time}
-                  type="button"
-                  onClick={() => setSelectedTime(time)}
-                  className={`time-option ${
-                    selectedTime === time
-                      ? "is-selected"
-                      : ""
-                  }`}
-                >
-                  {time}
-                </button>
-              ))}
+            <div className="booking-field">
+              <label htmlFor="booking-date">Data</label>
+              <input
+                id="booking-date"
+                type="date"
+                min={new Date().toISOString().split("T")[0]}
+                className="booking-control"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+              />
+            </div>
+
+            <h2 className="booking-subtitle">Datas/horários disponíveis</h2>
+            <p className="booking-helper">
+              Os horários aparecem após selecionar serviços, barbeiro e data.
+            </p>
+
+            {availableTimes.length > 0 ? (
+              <div className="time-grid">
+                {availableTimes.map((time) => (
+                  <button
+                    key={time}
+                    type="button"
+                    onClick={() => setSelectedTime(time)}
+                    className={`time-option ${
+                      selectedTime === time ? "is-selected" : ""
+                    }`}
+                  >
+                    {time}
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="empty-times">
+                Nenhum horário para exibir no momento.
+              </div>
+            )}
+          </section>
+        </div>
+
+        <section className="booking-section client-data">
+          <h2 className="booking-subtitle">Seus Dados</h2>
+          <p className="booking-helper">
+            Informe seus dados para que a barbearia confirme o agendamento.
+          </p>
+
+          <div className="client-fields">
+            <div className="booking-field">
+              <label htmlFor="client-name">Nome</label>
+              <input
+                id="client-name"
+                placeholder="Nome"
+                className="booking-control"
+                value={client.name}
+                onChange={(e) =>
+                  setClient({
+                    ...client,
+                    name: e.target.value,
+                  })
+                }
+              />
+            </div>
+
+            <div className="booking-field">
+              <label htmlFor="client-phone">Telefone</label>
+              <input
+                id="client-phone"
+                placeholder="Telefone"
+                className="booking-control"
+                value={client.phone}
+                onChange={(e) =>
+                  setClient({
+                    ...client,
+                    phone: e.target.value.replace(/\D/g, ""),
+                  })
+                }
+              />
+            </div>
+
+            <div className="booking-field">
+              <label htmlFor="client-email">Email</label>
+              <input
+                id="client-email"
+                placeholder="Email"
+                className="booking-control"
+                value={client.email}
+                onChange={(e) =>
+                  setClient({
+                    ...client,
+                    email: e.target.value,
+                  })
+                }
+              />
             </div>
           </div>
-        </div>
-
-        <div className="client-data">
-          <h2 className="booking-subtitle">Seus Dados</h2>
-
-          <input
-            placeholder="Nome"
-            className="booking-control"
-            value={client.name}
-            onChange={(e) =>
-              setClient({
-                ...client,
-                name: e.target.value,
-              })
-            }
-          />
-
-          <input
-            placeholder="Telefone"
-            className="booking-control"
-            value={client.phone}
-            onChange={(e) =>
-              setClient({
-                ...client,
-                phone: e.target.value.replace(/\D/g, ""),
-              })
-            }
-          />
-
-          <input
-            placeholder="Email"
-            className="booking-control"
-            value={client.email}
-            onChange={(e) =>
-              setClient({
-                ...client,
-                email: e.target.value,
-              })
-            }
-          />
-        </div>
+        </section>
 
         <div className="booking-summary">
           <h3 className="booking-subtitle">Resumo do Agendamento</h3>
