@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { authStorage } from "../../services/auth";
 import "./AdminLayout.css";
 
@@ -20,6 +20,7 @@ export default function AdminLayout() {
           <NavLink to="/admin/barbeiros">Barbeiros</NavLink>
           <NavLink to="/admin/portfolio">Portfólio</NavLink>
         </nav>
+        <Link className="admin-home-link" to="/">Voltar para Home</Link>
         <button className="admin-logout" onClick={logout}>Sair</button>
       </aside>
       <main className="admin-main"><Outlet /></main>

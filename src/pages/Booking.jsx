@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import BackHomeButton from "../components/BackHomeButton";
 import {
   servicesAPI,
   barbersAPI,
@@ -111,8 +112,8 @@ export default function Booking() {
 
   return (
     <div className="booking-page container">
-      {" "}
       <div className="booking-panel">
+        <BackHomeButton className="booking-home-button" />
         <h1 className="booking-title">Agendar Horário</h1>
 
         <div className="booking-grid">
