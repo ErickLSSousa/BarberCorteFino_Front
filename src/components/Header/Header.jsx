@@ -32,8 +32,14 @@ export default function Header() {
             </li>
 
             <li>
-              <Link to="/meus-agendamentos">
-                Meus Agendamentos
+              <Link to="/login">
+                Login Cliente
+              </Link>
+            </li>
+
+          <li>
+              <Link to="/admin/login">
+                Admin
               </Link>
             </li>
 
