@@ -5,6 +5,7 @@ import {
   availabilityAPI,
   appointmentsAPI,
 } from "../services/api";
+import "../components/BookingForm/BookingForm.css";
 
 export default function Booking() {
   const [services, setServices] = useState([]);
@@ -109,30 +110,30 @@ export default function Booking() {
 
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="booking-page container">
       {" "}
-      <div className="max-w-4xl mx-auto bg-zinc-900 rounded-3xl p-8 shadow-xl">
-        <h1 className="text-4xl font-bold text-center mb-8">Agendar Horário</h1>
+      <div className="booking-panel">
+        <h1 className="booking-title">Agendar Horário</h1>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="booking-grid">
           <div>
-            <h2 className="font-semibold mb-3">Serviços</h2>
+            <h2 className="booking-subtitle">Serviços</h2>
 
-            <div className="space-y-3">
+            <div className="service-list">
               {services.map((service) => (
                 <button
                   key={service.id}
                   type="button"
                   onClick={() => toggleService(service.id)}
-                  className={`w-full p-4 rounded-xl border text-left transition ${
+                  className={`service-option ${
                     selectedServices.includes(service.id)
-                      ? "bg-yellow-500 text-black border-yellow-500"
-                      : "bg-zinc-800 border-zinc-700"
+                      ? "is-selected"
+                      : ""
                   }`}
                 >
-                  <div className="font-medium">{service.name}</div>
+                  <div className="service-name">{service.name}</div>
 
-                  <div className="text-sm opacity-80">
+                  <div className="service-meta">
                     {service.duration_minutes} min
                   </div>
                 </button>
@@ -142,7 +143,7 @@ export default function Booking() {
 
           <div>
             <select
-              className="w-full mb-4 p-3 rounded-lg bg-zinc-800"
+              className="booking-control"
               value={selectedBarber}
               onChange={(e) => setSelectedBarber(e.target.value)}
             >
@@ -158,21 +159,21 @@ export default function Booking() {
             <input
               type="date"
               min={new Date().toISOString().split("T")[0]}
-              className="w-full mb-4 p-3 rounded-lg bg-zinc-800"
+              className="booking-control"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
             />
 
-            <div className="grid grid-cols-3 gap-2">
+            <div className="time-grid">
               {availableTimes.map((time) => (
                 <button
                   key={time}
                   type="button"
                   onClick={() => setSelectedTime(time)}
-                  className={`p-2 rounded-lg ${
+                  className={`time-option ${
                     selectedTime === time
-                      ? "bg-yellow-500 text-black"
-                      : "bg-zinc-800"
+                      ? "is-selected"
+                      : ""
                   }`}
                 >
                   {time}
@@ -182,12 +183,12 @@ export default function Booking() {
           </div>
         </div>
 
-        <div className="mt-8 border-t border-zinc-700 pt-6">
-          <h2 className="font-semibold mb-4">Seus Dados</h2>
+        <div className="client-data">
+          <h2 className="booking-subtitle">Seus Dados</h2>
 
           <input
             placeholder="Nome"
-            className="w-full mb-3 p-3 rounded-lg bg-zinc-800"
+            className="booking-control"
             value={client.name}
             onChange={(e) =>
               setClient({
@@ -199,7 +200,7 @@ export default function Booking() {
 
           <input
             placeholder="Telefone"
-            className="w-full mb-3 p-3 rounded-lg bg-zinc-800"
+            className="booking-control"
             value={client.phone}
             onChange={(e) =>
               setClient({
@@ -211,7 +212,7 @@ export default function Booking() {
 
           <input
             placeholder="Email"
-            className="w-full mb-3 p-3 rounded-lg bg-zinc-800"
+            className="booking-control"
             value={client.email}
             onChange={(e) =>
               setClient({
@@ -222,20 +223,20 @@ export default function Booking() {
           />
         </div>
 
-        <div className="mt-6 bg-zinc-800 rounded-xl p-5 border border-zinc-700">
-          <h3 className="font-semibold mb-3">Resumo do Agendamento</h3>
+        <div className="booking-summary">
+          <h3 className="booking-subtitle">Resumo do Agendamento</h3>
 
-          <div className="flex justify-between mb-2">
+          <div className="summary-row">
             <span>Serviços:</span>
             <span>{selectedServices.length}</span>
           </div>
 
-          <div className="flex justify-between mb-2">
+          <div className="summary-row">
             <span>Duração:</span>
             <span>{totalDuration} min</span>
           </div>
 
-          <div className="flex justify-between font-bold text-yellow-400">
+          <div className="summary-row summary-total">
             <span>Total:</span>
             <span>R$ {(totalPrice / 100).toFixed(2)}</span>
           </div>
@@ -244,7 +245,7 @@ export default function Booking() {
         <button
           disabled={loading}
           onClick={handleSubmit}
-          className="w-full mt-6 bg-yellow-500 text-black font-bold py-4 rounded-xl hover:scale-[1.02] transition"
+          className="booking-submit"
         >
           {loading ? "Agendando..." : "Confirmar Agendamento"}
         </button>
