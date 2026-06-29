@@ -1,9 +1,21 @@
 import axios from "axios";
 
+function normalizeBaseURL(url) {
+  return url.replace(/\/+$/, "");
+}
+
+const PRODUCTION_API_URL = "https://barbercortefino-back.onrender.com";
+
+function getApiBaseURL() {
+  const configuredApiURL = import.meta.env.VITE_API_URL?.trim();
+  const apiURL = configuredApiURL ||
+    (import.meta.env.DEV ? "http://localhost:3001" : PRODUCTION_API_URL);
+
+  return `${normalizeBaseURL(apiURL)}/api`;
+}
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL 
-           ? `${import.meta.env.VITE_API_URL}/api` 
-           : "http://localhost:3001/api",
+  baseURL: getApiBaseURL(),
   headers: {
     "Content-Type": "application/json",
   },
