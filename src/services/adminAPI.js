@@ -4,7 +4,7 @@ import { authHeaders, authStorage } from "./auth";
 const withAdminAuth = () => ({ headers: authHeaders(authStorage.getAdmin()) });
 
 export const adminAuthAPI = {
-  login: (credentials) => api.post("/admin/login", credentials),
+  login: (credentials) => api.post("/auth/admin/login", credentials),
 };
 
 export const clientAuthAPI = {
